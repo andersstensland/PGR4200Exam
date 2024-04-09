@@ -1,31 +1,31 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         String filePath = "src/csv/worldcities.csv";
 
-        List<City> cities = new ArrayList<>();
+        // Read data from CSV file
+        List<Map.Entry<String, Double>> latitudes = QuickSort.readCSV(filePath);
 
+        // Input
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n-------------------\nPress 1 for QuickSort\nPress 2 for MergeSort:");
+        int choice = scanner.nextInt();
 
-        /*
-        Problem 1. MergeSort (50 Marks)
-        At first, use the unique latitude values of each city only. (30/50 Marks)
-        a. Implement a proper merge sort algorithm so that all city latitudes are in an ordered list.
-        b. Count the number of merges needed to sort the dataset. Does it change if you randomly
-        order the list before sorting? Why/why not?
+        if (choice == 1) {
+            // Sort latitude
+            QuickSort.quickSort(latitudes, 0, latitudes.size() - 1);
+            System.out.println("\n-------------------\nQuickSort result: ");
+            for (Map.Entry<String, Double> entry : latitudes) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        } else if (choice == 2) {
+            System.out.println("\n-------------------\nMergeSort is not yet implemented");
+        } else {
+            System.out.println("\n-------------------\nInvalid choice");
+        }
 
-
-        Use the latitude and longitude values for each city. (20/50 Marsk)
-            c. Implement a proper merge sort algorithm so that the (latitude, longitude) pairs are in an
-               ordered list. What distance measure is used?
-         */
-
-
-
+        scanner.close();
     }
-
-
-
-
 }
