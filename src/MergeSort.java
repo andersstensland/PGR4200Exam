@@ -151,7 +151,7 @@ public class MergeSort {
         }
 
 
-        mergeCount[0]++; // Increment the number of merges
+        mergeCount[0]++;
 
     }
 
@@ -172,26 +172,28 @@ public class MergeSort {
 
 
     private static void merge2(List<City> cities, int left, int middle, int right, int[] mergeCount) {
+        // Finner størrelesnen til sub-arrays for merge
         int n1 = middle - left + 1;
         int n2 = right - middle;
 
-        // Temporary arrays
+        // Lager to midligertidige arrays for venstre og høyre siden
         List<City> L = new ArrayList<>(n1);
         List<City> R = new ArrayList<>(n2);
 
-        // Copy data to temporary arrays
+        // kopierer data til midligere array listene
         for (int i = 0; i < n1; ++i)
             L.add(i, cities.get(left + i));
         for (int j = 0; j < n2; ++j)
             R.add(j, cities.get(middle + 1 + j));
 
         // Initial indexes of first and second subarrays
-        int i = 0, j = 0;
+        int i = 0;
+        int j = 0;
 
         // Initial index of merged subarray array
         int k = left;
-        double refLat = 0.0; // Reference latitude
-        double refLon = 0.0; // Reference longitude
+        double refLat = 0.0; // Ref latitude
+        double refLon = 0.0; // Ref longitude
 
         while (i < n1 && j < n2) {
             City leftCity = L.get(i);
@@ -209,14 +211,12 @@ public class MergeSort {
             k++;
         }
 
-        // Copy remaining elements of L[] if any
         while (i < n1) {
             cities.set(k, L.get(i));
             i++;
             k++;
         }
 
-        // Copy remaining elements of R[] if any
         while (j < n2) {
             cities.set(k, R.get(j));
             j++;
