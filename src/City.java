@@ -4,9 +4,10 @@ public class City {
 
     public double longitude;
 
-    public City(String name, double latitude) {
+    public City(String name, double latitude, double longitude) {
         this.name = name;
         this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public int compareTo(City other) {
@@ -16,6 +17,6 @@ public class City {
 
     @Override
     public String toString() {
-        return name + " (" + latitude + ")";
+        return name + " (" + latitude + ") "+" (" + longitude + ")";
     }
 }
