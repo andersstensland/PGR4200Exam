@@ -16,8 +16,14 @@ public class MergeSort {
 
             SVAR:
 
-            Mengden merges kommer alltid til å være den samme uavhengig av hvordan dataset er sortert dette skyldes
-            at mergeSort er O(log n).
+            Merge sort er en "divide and conquer"-algoritme som deler datasettet i to halvdeler, sorterer hver halvdel
+            rekursivt, og deretter sammenslår de to halvdelene til en sorterert liste.
+
+            Antall sammenslåinger (merges) som trengs for å sortere datasettet er direkte knyttet til hvor mange nivåer
+            av rekursjon i algoritmen, ikke til den opprinnelige rekkefølgen på dataene. Dette vil si at det har null
+            betydning hvordan datasettet er sortert. Dette skyldes at algoritmen følger ett logaritmisk forhold
+            til størrelsen altså log(n).
+
 
 
         Use the latitude and longitude values for each city. (20/50 Marks)
@@ -25,6 +31,9 @@ public class MergeSort {
                ordered list. What distance measure is used?
 
                // Usikker på om dette er løst riktig
+
+
+               // bedre med linked list?
 
     */
 
@@ -35,10 +44,15 @@ public class MergeSort {
         List<City> cities1 = new ArrayList<>();
 
 
-        // Les fil og fyll inn cities list;
+        /*
+
+        - Leser fil og legger inn City objekter i Array Listen
+
+
+         */
         try (Scanner scanner = new Scanner(new File(filePath))) {
             if (scanner.hasNextLine()) {
-                scanner.nextLine(); // Hopper over første linjen i CSV filen
+                scanner.nextLine(); // Hopper over første linjen i CSV filen (overskrifter)
             }
 
             // While loop for resten av CSV Filen
@@ -59,9 +73,7 @@ public class MergeSort {
 
 
 
-                // add cities1
-
-
+                // Legger til i to ulike array lister en for oppgave A og en for oppgave B
                 cities.add(new City(name, latitude, longitude));
 
                 cities1.add(new City(name, latitude, longitude));
@@ -76,27 +88,28 @@ public class MergeSort {
 
 
         int[] mergeCount = new int[1];
+        int[] mergeCount2 = new int[1];
 
 
         mergeSort(cities, 0, cities.size() - 1, mergeCount);
 
-        mergeSort2(cities1, 0, cities.size() - 1, mergeCount);
+        mergeSort2(cities1, 0, cities.size() - 1, mergeCount2);
 
         System.out.println(cities1);
 
-        System.out.println("Number of merges needed: " + mergeCount[0]);
+        System.out.println("Number of merges needed: " + mergeCount2[0]);
     }
 
     public static void mergeSort(List<City> cities, int left, int right, int[] mergeCount) {
         if (left < right) {
-            // Find the middle point
+            // Finner mellompunktet til arrayet
             int middle = (left + right) / 2;
 
-            // Sort first and second halves
+            // Sorter første og andre halvdelene
             mergeSort(cities, left, middle, mergeCount);
             mergeSort(cities, middle + 1, right, mergeCount);
 
-            // Merge the sorted halves
+            // Merger de sorter halvdelene
             merge(cities, left, middle, right, mergeCount);
         }
     }
@@ -158,44 +171,45 @@ public class MergeSort {
 
     public static void mergeSort2(List<City> cities, int left, int right, int[] mergeCount) {
         if (left < right) {
-            // Find the middle point
+            // Finner mellompunktet til arrayet
             int middle = (left + right) / 2;
 
-            // Sort first and second halves
+            // Sorter første og andre halvdelene
             mergeSort2(cities, left, middle, mergeCount);
             mergeSort2(cities, middle + 1, right, mergeCount);
 
-            // Merge the sorted halves
+           // Merger de
             merge2(cities, left, middle, right, mergeCount);
         }
     }
 
 
     private static void merge2(List<City> cities, int left, int middle, int right, int[] mergeCount) {
-        // Finner størrelesnen til sub-arrays for merge
-        int n1 = middle - left + 1;
-        int n2 = right - middle;
+        // Finner størrelsen til sub-arrays for merge
+        int arr1 = middle - left + 1;
+        int arr2 = right - middle;
 
         // Lager to midligertidige arrays for venstre og høyre siden
-        List<City> L = new ArrayList<>(n1);
-        List<City> R = new ArrayList<>(n2);
+        List<City> L = new ArrayList<>(arr1);
+        List<City> R = new ArrayList<>(arr2);
 
         // kopierer data til midligere array listene
-        for (int i = 0; i < n1; ++i)
+        for (int i = 0; i < arr1; ++i)
             L.add(i, cities.get(left + i));
-        for (int j = 0; j < n2; ++j)
+
+        for (int j = 0; j < arr2; ++j)
             R.add(j, cities.get(middle + 1 + j));
 
-        // Initial indexes of first and second subarrays
+        // Pointere til indexene
         int i = 0;
         int j = 0;
 
-        // Initial index of merged subarray array
+        // index of merged subarray array
         int k = left;
         double refLat = 0.0; // Ref latitude
         double refLon = 0.0; // Ref longitude
 
-        while (i < n1 && j < n2) {
+        while (i < arr1 && j < arr2) {
             City leftCity = L.get(i);
             City rightCity = R.get(j);
             double distanceToLeftCity = calculateDistance(refLat, refLon, leftCity.latitude, leftCity.longitude);
@@ -211,13 +225,13 @@ public class MergeSort {
             k++;
         }
 
-        while (i < n1) {
+        while (i < arr1) {
             cities.set(k, L.get(i));
             i++;
             k++;
         }
 
-        while (j < n2) {
+        while (j < arr2) {
             cities.set(k, R.get(j));
             j++;
             k++;
