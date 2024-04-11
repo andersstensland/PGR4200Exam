@@ -32,6 +32,11 @@ public class MergeSort {
 
                // Usikker på om dette er løst riktig
 
+               Det er flere mulig måter og tolke denne oppgaven på
+
+               - Først sortere etter latitude og deretter longitude eller motsatt
+
+               - Kombinert metrikk for eks. avstand fra equator (som vi gjør nå)
 
                // bedre med linked list?
 
