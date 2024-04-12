@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class QuickSort {
     public static void main(String[] args) {
-        String filePath = "csv/worldcities.csv";
+        String filePath = "src/csv/worldcities.csv";
         List<City> cities = new ArrayList<>();
 
         List<City> cities1 = new ArrayList<>();
