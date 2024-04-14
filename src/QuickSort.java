@@ -161,17 +161,16 @@ public class QuickSort {
     }
 
     private static int partition3(List<City> cities, int low, int high, int[] comparisonCount) {
-        City pivot = cities.get(high); // Using the last element as pivot
-        int i = (low - 1); // pointer for the smaller element
+        City pivot = cities.get(high); 
+        int i = (low - 1); 
 
         for (int j = low; j < high; j++) {
-            // Check if current city should come before the pivot
-            // Compare first by latitude, then by longitude if latitudes are equal
+l
             if (cities.get(j).latitude < pivot.latitude ||
                     (cities.get(j).latitude == pivot.latitude && cities.get(j).longitude < pivot.longitude)) {
                 i++;
 
-                // Swap cities.get(i) and cities.get(j)
+
                 City temp = cities.get(i);
                 cities.set(i, cities.get(j));
                 cities.set(j, temp);
@@ -180,7 +179,7 @@ public class QuickSort {
             comparisonCount[0]++;
         }
 
-        // Swap cities.get(i+1) and cities.get(high) (or pivot)
+
         City temp = cities.get(i + 1);
         cities.set(i + 1, cities.get(high));
         cities.set(high, temp);
