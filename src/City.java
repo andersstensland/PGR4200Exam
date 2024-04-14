@@ -4,14 +4,17 @@ public class City {
 
     public double longitude;
 
-    public City(String name, double latitude, double longitude) {
+    public String country;
+
+    public City(String name, double latitude, double longitude, String country) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.country = country;
     }
 
     @Override
     public String toString() {
-        return name + " (" + latitude + ") "+" (" + longitude + ")";
+        return name + " (" + latitude + ") "+" (" + longitude + ") "+" (" + country + ")";
     }
 }

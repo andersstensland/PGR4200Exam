@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class QuickSort {
 
@@ -56,15 +54,16 @@ public class QuickSort {
                 String name = columns[1].replace("\"", "");
                 String latitudeString = columns[2].replace("\"", "");
                 String longitudeString = columns[3].replace("\"", "");
+                String country = columns[4].replace("\"", "");
 
                 double latitude = Double.parseDouble(latitudeString);
                 double longitude = Double.parseDouble(longitudeString);
 
 
                 // Legger til i to ulike array lister en for oppgave A og en for oppgave B
-                cities.add(new City(name, latitude, longitude));
+                cities.add(new City(name, latitude, longitude, country));
 
-                cities1.add(new City(name, latitude, longitude));
+                cities1.add(new City(name, latitude, longitude, country));
 
             }
 
@@ -74,11 +73,18 @@ public class QuickSort {
         }
 
 
-        int[] comparisonCount = new int[0];
+        int[] comparisonCount = new int[1];
 
+        // Shuffling for å simulerer at comparsions endrer seg (Oppgave 2 B)
+        Collections.shuffle(cities);
 
-        quickSort(cities, 0, cities.size() - 1, comparisonCount);
-        System.out.println(cities);
+        quickSort2(cities, 0, cities.size() - 1, comparisonCount);
+        System.out.println("Cities sorted by latitude and longitude");
+        for (City city : cities) {
+            System.out.println(city.name + " - " + city.latitude + " - " + city.longitude + " - " + city.country);
+        }
+        System.out.println("Number of comparisons needed: " + comparisonCount[0]);
+
     }
 
     // Hentet fra https://www.geeksforgeeks.org/quick-sort/
@@ -104,7 +110,7 @@ public class QuickSort {
                 cities.set(j, temp);
             }
         }
-        // Bytter cities.get(i+1) og cities.get(high) (or pivot)
+        // Bytter cities.get(i+1) og cities.get(high) (eller pivot)
         City temp = cities.get(i + 1);
         cities.set(i + 1, cities.get(high));
         cities.set(high, temp);
@@ -116,6 +122,73 @@ public class QuickSort {
 
 
     }
+
+    public static void quickSort2(List<City> cities, int low, int high, int[] comparisonCount) {
+        if (low < high) {
+            int pi = partition2(cities, low, high, comparisonCount);
+            quickSort2(cities, low, pi - 1, comparisonCount);
+            quickSort2(cities, pi + 1, high, comparisonCount);
+        }
+    }
+
+    private static int partition2(List<City> cities, int low, int high, int[] comparisonCount) {
+        double pivotDistance = calculateDistance(0, 0, cities.get(high).latitude, cities.get(high).longitude);
+        int i = (low - 1);
+        for (int j = low; j < high; j++) {
+            double currentDistance = calculateDistance(0, 0, cities.get(j).latitude, cities.get(j).longitude);
+            if (currentDistance < pivotDistance) {
+                i++;
+                City temp = cities.get(i);
+                cities.set(i, cities.get(j));
+                cities.set(j, temp);
+            }
+            comparisonCount[0]++;
+        }
+        City temp = cities.get(i + 1);
+        cities.set(i + 1, cities.get(high));
+        cities.set(high, temp);
+
+        return i + 1;
+    }
+
+
+    public static void quickSort3(List<City> cities, int low, int high, int[] comparisonCount) {
+        if (low < high) {
+            int pi = partition3(cities, low, high, comparisonCount);
+            quickSort3(cities, low, pi - 1, comparisonCount);
+            quickSort3(cities, pi + 1, high, comparisonCount);
+        }
+    }
+
+    private static int partition3(List<City> cities, int low, int high, int[] comparisonCount) {
+        City pivot = cities.get(high); // Using the last element as pivot
+        int i = (low - 1); // pointer for the smaller element
+
+        for (int j = low; j < high; j++) {
+            // Check if current city should come before the pivot
+            // Compare first by latitude, then by longitude if latitudes are equal
+            if (cities.get(j).latitude < pivot.latitude ||
+                    (cities.get(j).latitude == pivot.latitude && cities.get(j).longitude < pivot.longitude)) {
+                i++;
+
+                // Swap cities.get(i) and cities.get(j)
+                City temp = cities.get(i);
+                cities.set(i, cities.get(j));
+                cities.set(j, temp);
+            }
+
+            comparisonCount[0]++;
+        }
+
+        // Swap cities.get(i+1) and cities.get(high) (or pivot)
+        City temp = cities.get(i + 1);
+        cities.set(i + 1, cities.get(high));
+        cities.set(high, temp);
+
+        return i + 1;
+    }
+
+
 
 
     // Hentet fra https://www.baeldung.com/java-find-distance-between-points#equirectangular-distance-approximation

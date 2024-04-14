@@ -71,6 +71,7 @@ public class MergeSort {
                 String name = columns[1].replace("\"", "");
                 String latitudeString = columns[2].replace("\"", "");
                 String longitudeString = columns[3].replace("\"", "");
+                String country = columns[4].replace("\"", "");
 
                 double latitude = Double.parseDouble(latitudeString);
                 double longitude = Double.parseDouble(longitudeString);
@@ -79,9 +80,9 @@ public class MergeSort {
 
 
                 // Legger til i to ulike array lister en for oppgave A og en for oppgave B
-                cities.add(new City(name, latitude, longitude));
+                cities.add(new City(name, latitude, longitude, country));
 
-                cities1.add(new City(name, latitude, longitude));
+                cities1.add(new City(name, latitude, longitude, country));
 
             }
 
@@ -95,12 +96,18 @@ public class MergeSort {
         int[] mergeCount = new int[1];
         int[] mergeCount2 = new int[1];
 
+        long start2 = System.currentTimeMillis();
+        //mergeSort(cities, 0, cities.size() - 1, mergeCount);
+        long end2 = System.currentTimeMillis();
 
-        mergeSort(cities, 0, cities.size() - 1, mergeCount);
+        System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
 
         mergeSort2(cities1, 0, cities.size() - 1, mergeCount2);
 
-        System.out.println(cities1);
+        System.out.println("Cities sorted by latitude and longitude");
+        for (City city : cities) {
+            System.out.println(city.name + " - " + city.latitude + " - " + city.longitude + " - " + city.country);
+        }
 
         System.out.println("Number of merges needed: " + mergeCount2[0]);
     }
