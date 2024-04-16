@@ -15,6 +15,7 @@ public class QuickSort {
            Antall sammenligninger kan endre seg i QuickSort dette skyldes pivot element.
 
 
+
     Use the latitude and longitude values for each city. (20/50 Marsk)
         c. Implement a proper quick sort algorithm so that the (latitude, longitude) pairs are in an
         ordered list.

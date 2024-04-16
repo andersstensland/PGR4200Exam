@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class MergeSort {
             Antall sammenslåinger (merges) som trengs for å sortere datasettet er direkte knyttet til hvor mange nivåer
             av rekursjon i algoritmen, ikke til den opprinnelige rekkefølgen på dataene. Dette vil si at det har null
             betydning hvordan datasettet er sortert. Dette skyldes at algoritmen følger ett logaritmisk forhold
-            til størrelsen altså log(n).
+            til størrelsen altså O(n log n).
 
 
 
@@ -44,6 +45,8 @@ public class MergeSort {
 
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
+        String outputFilePath = "csv/sorted_worldcities.csv";
+
         List<City> cities = new ArrayList<>();
 
         List<City> cities1 = new ArrayList<>();
@@ -96,23 +99,35 @@ public class MergeSort {
         int[] mergeCount = new int[1];
         int[] mergeCount2 = new int[1];
 
-        long start2 = System.currentTimeMillis();
-        //mergeSort(cities, 0, cities.size() - 1, mergeCount);
-        long end2 = System.currentTimeMillis();
 
+        //mergeSort(cities, 0, cities.size() - 1, mergeCount);
+
+
+
+        long start2 = System.currentTimeMillis();
+        mergeSort2(cities, 0, cities.size() - 1, mergeCount2);
+
+        long end2 = System.currentTimeMillis();
         System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
 
-        mergeSort2(cities1, 0, cities.size() - 1, mergeCount2);
-
-        System.out.println("Cities sorted by latitude and longitude");
-        for (City city : cities) {
-            System.out.println(city.name + " - " + city.latitude + " - " + city.longitude + " - " + city.country);
+        // Write sorted data to a new CSV file
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath))) {
+            writer.println("Name,Latitude,Longitude,Country"); // Write header
+            for (City city : cities) {
+                writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing to file: " + outputFilePath);
         }
 
+        System.out.println("Cities sorted and written to: " + outputFilePath);
         System.out.println("Number of merges needed: " + mergeCount2[0]);
+
     }
 
     public static void mergeSort(List<City> cities, int left, int right, int[] mergeCount) {
+
+
         if (left < right) {
             // Finner mellompunktet til arrayet
             int middle = (left + right) / 2;
