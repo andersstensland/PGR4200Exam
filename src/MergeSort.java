@@ -39,19 +39,17 @@ public class MergeSort {
 
                - Kombinert metrikk for eks. avstand fra equator (som vi gjør nå)
 
-               // bedre med linked list?
 
     */
 
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
-        String outputFilePath1A = "csv/sorted_bylat_worldcities.csv";
-        String outputFilePath1C = "csv/sorted_bylat&lng_worldcities.csv";
+        String outputFilePath1A = "csv/ms_sorted_bylat_worldcities.csv";
+        String outputFilePath1C = "csv/ms_sorted_bylat&lng_worldcities.csv";
 
         List<City> cities = new ArrayList<>();
 
 
-        long start2 = System.currentTimeMillis();
 
         List<City> cities1 = new ArrayList<>();
 
@@ -109,9 +107,12 @@ public class MergeSort {
 
         Problem 1B: Sorting by latitude
 
+        long start2 = System.currentTimeMillis();
+
         mergeSort(cities, 0, cities.size() - 1, mergeCount);
 
         long end2 = System.currentTimeMillis();
+
         System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
 
         // Write sorted data to a new CSV file
@@ -130,13 +131,16 @@ public class MergeSort {
 
          */
 
-        /*
 
-        Problem 1C: Sorting by latitude
+
+        //Problem 1C: Sorting by latitude & longitude distance measure
+
+        long start2 = System.currentTimeMillis();
 
         mergeSort2(cities, 0, cities.size() - 1, mergeCount);
 
         long end2 = System.currentTimeMillis();
+
         System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
 
         // Write sorted data to a new CSV file
@@ -153,7 +157,6 @@ public class MergeSort {
         System.out.println("Number of merges needed: " + mergeCount[0]);
 
 
-         */
     }
 
     public static void mergeSort(List<City> cities, int left, int right, int[] mergeCount) {
