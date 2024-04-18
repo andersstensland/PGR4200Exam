@@ -29,11 +29,11 @@ public class QuickSort {
 
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
-        String outputFilePath = "csv/qs_sorted_worldcities.csv";
+        String outputFilePath2A = "csv/qs_sorted_bylat_worldcities.csv";
+        String outputFilePath2C = "csv/qs_sorted_bylat&lng_worldcities.csv";
 
         List<City> cities = new ArrayList<>();
 
-        List<City> cities1 = new ArrayList<>();
 
 
         /*
@@ -64,10 +64,9 @@ public class QuickSort {
                 double longitude = Double.parseDouble(longitudeString);
 
 
-                // Legger til i to ulike array lister en for oppgave A og en for oppgave B
+                // Legger til i array list
                 cities.add(new City(name, latitude, longitude, country));
 
-                cities1.add(new City(name, latitude, longitude, country));
 
             }
 
@@ -79,22 +78,45 @@ public class QuickSort {
 
         int[] comparisonCount = new int[1];
 
+        // Problem 2A
+
         // Shuffling for å simulerer at comparsions endrer seg (Oppgave 2 B)
         Collections.shuffle(cities);
 
-        quickSort3(cities, 0, cities.size() - 1, comparisonCount);
+
+        quickSort2(cities, 0, cities.size() - 1, comparisonCount);
         // Write sorted data to a new CSV file
-        try (PrintWriter writer = new PrintWriter(new File(outputFilePath))) {
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath2A))) {
+            writer.println("Name,Latitude,Longitude,Country");
+            for (City city : cities) {
+                writer.println(city.name + "," + city.latitude);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing to file: " + outputFilePath2A);
+        }
+
+        System.out.println("Cities sorted and written to: " + outputFilePath2A);
+        System.out.println("Number of comparisons needed: " + comparisonCount[0]);
+
+
+        /*
+        // Problem 2C
+
+        quickSort(cities, 0, cities.size() - 1, comparisonCount);
+        // Write sorted data to a new CSV file
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath2C))) {
             writer.println("Name,Latitude,Longitude,Country");
             for (City city : cities) {
                 writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Error writing to file: " + outputFilePath);
+            System.out.println("Error writing to file: " + outputFilePath2C);
         }
 
-        System.out.println("Cities sorted and written to: " + outputFilePath);
+        System.out.println("Cities sorted and written to: " + outputFilePath2C);
         System.out.println("Number of comparisons needed: " + comparisonCount[0]);
+
+         */
 
     }
 
