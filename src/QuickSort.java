@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class QuickSort {
@@ -28,6 +29,8 @@ public class QuickSort {
 
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
+        String outputFilePath = "csv/qs_sorted_worldcities.csv";
+
         List<City> cities = new ArrayList<>();
 
         List<City> cities1 = new ArrayList<>();
@@ -79,11 +82,18 @@ public class QuickSort {
         // Shuffling for å simulerer at comparsions endrer seg (Oppgave 2 B)
         Collections.shuffle(cities);
 
-        quickSort2(cities, 0, cities.size() - 1, comparisonCount);
-        System.out.println("Cities sorted by latitude and longitude");
-        for (City city : cities) {
-            System.out.println(city.name + " - " + city.latitude + " - " + city.longitude + " - " + city.country);
+        quickSort3(cities, 0, cities.size() - 1, comparisonCount);
+        // Write sorted data to a new CSV file
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath))) {
+            writer.println("Name,Latitude,Longitude,Country");
+            for (City city : cities) {
+                writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing to file: " + outputFilePath);
         }
+
+        System.out.println("Cities sorted and written to: " + outputFilePath);
         System.out.println("Number of comparisons needed: " + comparisonCount[0]);
 
     }

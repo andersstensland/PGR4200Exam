@@ -45,9 +45,13 @@ public class MergeSort {
 
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
-        String outputFilePath = "csv/sorted_worldcities.csv";
+        String outputFilePath1A = "csv/sorted_bylat_worldcities.csv";
+        String outputFilePath1C = "csv/sorted_bylat&lng_worldcities.csv";
 
         List<City> cities = new ArrayList<>();
+
+
+        long start2 = System.currentTimeMillis();
 
         List<City> cities1 = new ArrayList<>();
 
@@ -76,16 +80,15 @@ public class MergeSort {
                 String longitudeString = columns[3].replace("\"", "");
                 String country = columns[4].replace("\"", "");
 
-                double latitude = Double.parseDouble(latitudeString);
-                double longitude = Double.parseDouble(longitudeString);
+                try {
+                    double latitude = Double.parseDouble(latitudeString);
+                    double longitude = Double.parseDouble(longitudeString);
+                    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) continue; // Validerer kordinatene
 
-
-
-
-                // Legger til i to ulike array lister en for oppgave A og en for oppgave B
-                cities.add(new City(name, latitude, longitude, country));
-
-                cities1.add(new City(name, latitude, longitude, country));
+                    cities.add(new City(name, latitude, longitude, country));
+                } catch (NumberFormatException e) {
+                    continue; // Handles malformed numeric data
+                }
 
             }
 
@@ -97,37 +100,64 @@ public class MergeSort {
 
 
         int[] mergeCount = new int[1];
-        int[] mergeCount2 = new int[1];
 
 
         //mergeSort(cities, 0, cities.size() - 1, mergeCount);
 
 
+        /*
 
-        long start2 = System.currentTimeMillis();
-        mergeSort2(cities, 0, cities.size() - 1, mergeCount2);
+        Problem 1B: Sorting by latitude
+
+        mergeSort(cities, 0, cities.size() - 1, mergeCount);
 
         long end2 = System.currentTimeMillis();
         System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
 
         // Write sorted data to a new CSV file
-        try (PrintWriter writer = new PrintWriter(new File(outputFilePath))) {
-            writer.println("Name,Latitude,Longitude,Country"); // Write header
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath1A))) {
+            writer.println("Name,Latitude,Longitude,Country");
+            for (City city : cities) {
+                writer.println(city.name + "," + city.latitude);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing to file: " + outputFilePath1A);
+        }
+
+        System.out.println("Cities sorted and written to: " + outputFilePath1A);
+        System.out.println("Number of merges needed: " + mergeCount[0]);
+
+
+         */
+
+        /*
+
+        Problem 1C: Sorting by latitude
+
+        mergeSort2(cities, 0, cities.size() - 1, mergeCount);
+
+        long end2 = System.currentTimeMillis();
+        System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
+
+        // Write sorted data to a new CSV file
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath1C))) {
+            writer.println("Name,Latitude,Longitude,Country");
             for (City city : cities) {
                 writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Error writing to file: " + outputFilePath);
+            System.out.println("Error writing to file: " + outputFilePath1C);
         }
 
-        System.out.println("Cities sorted and written to: " + outputFilePath);
-        System.out.println("Number of merges needed: " + mergeCount2[0]);
+        System.out.println("Cities sorted and written to: " + outputFilePath1C);
+        System.out.println("Number of merges needed: " + mergeCount[0]);
 
+
+         */
     }
 
     public static void mergeSort(List<City> cities, int left, int right, int[] mergeCount) {
-
-
+        // Base case
         if (left < right) {
             // Finner mellompunktet til arrayet
             int middle = (left + right) / 2;
