@@ -42,16 +42,14 @@ public class MergeSort {
 
     */
 
+
+
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
         String outputFilePath1A = "csv/ms_sorted_bylat_worldcities.csv";
         String outputFilePath1C = "csv/ms_sorted_bylat&lng_worldcities.csv";
 
         List<City> cities = new ArrayList<>();
-
-
-
-        List<City> cities1 = new ArrayList<>();
 
 
         /*
@@ -103,9 +101,8 @@ public class MergeSort {
         //mergeSort(cities, 0, cities.size() - 1, mergeCount);
 
 
-        /*
 
-        Problem 1B: Sorting by latitude
+        //Problem 1A: Sorting by latitude
 
         long start2 = System.currentTimeMillis();
 
@@ -119,7 +116,7 @@ public class MergeSort {
         try (PrintWriter writer = new PrintWriter(new File(outputFilePath1A))) {
             writer.println("Name,Latitude,Longitude,Country");
             for (City city : cities) {
-                writer.println(city.name + "," + city.latitude);
+                writer.println(city.name + "," + city.latitude + "," + city.country);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error writing to file: " + outputFilePath1A);
@@ -129,12 +126,11 @@ public class MergeSort {
         System.out.println("Number of merges needed: " + mergeCount[0]);
 
 
-         */
 
 
 
         //Problem 1C: Sorting by latitude & longitude distance measure
-
+        /*
         long start2 = System.currentTimeMillis();
 
         mergeSort2(cities, 0, cities.size() - 1, mergeCount);
@@ -145,7 +141,7 @@ public class MergeSort {
 
         // Write sorted data to a new CSV file
         try (PrintWriter writer = new PrintWriter(new File(outputFilePath1C))) {
-            writer.println("Name,Latitude,Longitude,Country");
+            writer.println("Name, Latitude, Longitude, Country");
             for (City city : cities) {
                 writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
             }
@@ -155,6 +151,7 @@ public class MergeSort {
 
         System.out.println("Cities sorted and written to: " + outputFilePath1C);
         System.out.println("Number of merges needed: " + mergeCount[0]);
+        */
 
 
     }
@@ -180,11 +177,13 @@ public class MergeSort {
         int arr1 = middle - left + 1;
         int arr2 = right - middle;
 
+
+
         // Lager to midlertidig arrays
         List<City> L = new ArrayList<>(arr1);
         List<City> R = new ArrayList<>(arr2);
 
-        // Lager temp arrays for venstre og høyre siden
+        // Fyller temp arrays for venstre og høyre siden
         for (int i = 0; i < arr1; ++i)
             L.add(i, cities.get(left + i));
         for (int j = 0; j < arr2; ++j)
@@ -230,6 +229,7 @@ public class MergeSort {
 
 
     public static void mergeSort2(List<City> cities, int left, int right, int[] mergeCount) {
+
         if (left < right) {
             // Finner mellompunktet til arrayet
             int middle = (left + right) / 2;

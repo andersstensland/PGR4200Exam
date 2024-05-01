@@ -79,17 +79,17 @@ public class QuickSort {
         int[] comparisonCount = new int[1];
 
         // Problem 2A
-
+        /*
         // Shuffling for å simulerer at comparsions endrer seg (Oppgave 2 B)
         Collections.shuffle(cities);
 
 
-        quickSort2(cities, 0, cities.size() - 1, comparisonCount);
+        quickSort(cities, 0, cities.size() - 1, comparisonCount);
         // Write sorted data to a new CSV file
         try (PrintWriter writer = new PrintWriter(new File(outputFilePath2A))) {
             writer.println("Name,Latitude,Longitude,Country");
             for (City city : cities) {
-                writer.println(city.name + "," + city.latitude);
+                writer.println(city.name + "," + city.latitude + "," + city.country);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Error writing to file: " + outputFilePath2A);
@@ -97,12 +97,12 @@ public class QuickSort {
 
         System.out.println("Cities sorted and written to: " + outputFilePath2A);
         System.out.println("Number of comparisons needed: " + comparisonCount[0]);
+        */
 
 
-        /*
         // Problem 2C
 
-        quickSort(cities, 0, cities.size() - 1, comparisonCount);
+        quickSort2(cities, 0, cities.size() - 1, comparisonCount);
         // Write sorted data to a new CSV file
         try (PrintWriter writer = new PrintWriter(new File(outputFilePath2C))) {
             writer.println("Name,Latitude,Longitude,Country");
@@ -116,7 +116,6 @@ public class QuickSort {
         System.out.println("Cities sorted and written to: " + outputFilePath2C);
         System.out.println("Number of comparisons needed: " + comparisonCount[0]);
 
-         */
 
     }
 
@@ -183,44 +182,6 @@ public class QuickSort {
 
         return i + 1;
     }
-
-
-    public static void quickSort3(List<City> cities, int low, int high, int[] comparisonCount) {
-        if (low < high) {
-            int pi = partition3(cities, low, high, comparisonCount);
-            quickSort3(cities, low, pi - 1, comparisonCount);
-            quickSort3(cities, pi + 1, high, comparisonCount);
-        }
-    }
-
-    private static int partition3(List<City> cities, int low, int high, int[] comparisonCount) {
-        City pivot = cities.get(high); // Using the last element as pivot
-        int i = (low - 1); // pointer for the smaller element
-
-        for (int j = low; j < high; j++) {
-            // Check if current city should come before the pivot
-            // Compare first by latitude, then by longitude if latitudes are equal
-            if (cities.get(j).latitude < pivot.latitude ||
-                    (cities.get(j).latitude == pivot.latitude && cities.get(j).longitude < pivot.longitude)) {
-                i++;
-
-                // Swap cities.get(i) and cities.get(j)
-                City temp = cities.get(i);
-                cities.set(i, cities.get(j));
-                cities.set(j, temp);
-            }
-
-            comparisonCount[0]++;
-        }
-
-        // Swap cities.get(i+1) and cities.get(high) (or pivot)
-        City temp = cities.get(i + 1);
-        cities.set(i + 1, cities.get(high));
-        cities.set(high, temp);
-
-        return i + 1;
-    }
-
 
 
 
