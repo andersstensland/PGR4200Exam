@@ -31,14 +31,6 @@ public class MergeSort {
             c. Implement a proper merge sort algorithm so that the (latitude, longitude) pairs are in an
                ordered list. What distance measure is used?
 
-               // Usikker på om dette er løst riktig
-
-               Det er flere mulig måter og tolke denne oppgaven på
-
-               - Først sortere etter latitude og deretter longitude eller motsatt
-
-               - Kombinert metrikk for eks. avstand fra equator (som vi gjør nå)
-
 
     */
 
