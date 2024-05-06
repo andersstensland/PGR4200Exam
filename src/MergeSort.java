@@ -30,11 +30,6 @@ public class MergeSort {
             c. Implement a proper merge sort algorithm so that the (latitude, longitude) pairs are in an
                ordered list. What distance measure is used?
 
-               // Usikker på om dette er løst riktig
-
-
-               // bedre med linked list?
-
     */
 
     public static void main(String[] args) {
