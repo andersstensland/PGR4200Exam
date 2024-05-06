@@ -4,19 +4,17 @@ public class City {
 
     public double longitude;
 
-    public City(String name, double latitude, double longitude) {
+    public String country;
+
+    public City(String name, double latitude, double longitude, String country) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.country = country;
     }
-
-    public int compareTo(City other) {
-        return Double.compare(this.latitude, other.latitude);
-    }
-
 
     @Override
     public String toString() {
-        return name + " (" + latitude + ") "+" (" + longitude + ")";
+        return name + " (" + latitude + ") "+" (" + longitude + ") "+" (" + country + ")";
     }
 }

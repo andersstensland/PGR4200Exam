@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,19 +23,22 @@ public class MergeSort {
             Antall sammenslåinger (merges) som trengs for å sortere datasettet er direkte knyttet til hvor mange nivåer
             av rekursjon i algoritmen, ikke til den opprinnelige rekkefølgen på dataene. Dette vil si at det har null
             betydning hvordan datasettet er sortert. Dette skyldes at algoritmen følger ett logaritmisk forhold
-            til størrelsen altså log(n).
+            til størrelsen altså O(n log n).
 
 
 
         Use the latitude and longitude values for each city. (20/50 Marks)
             c. Implement a proper merge sort algorithm so that the (latitude, longitude) pairs are in an
                ordered list. What distance measure is used?
-
-    */
-
+*/
     public static void main(String[] args) {
-        String filePath = "src/csv/worldcities.csv";
+        String filePath = "csv/worldcities.csv";
+        String outputFilePath1A = "csv/ms_sorted_bylat_worldcities.csv";
+        String outputFilePath1C = "csv/ms_sorted_bylat&lng_worldcities.csv";
+
         List<City> cities = new ArrayList<>();
+
+
 
         List<City> cities1 = new ArrayList<>();
 
@@ -61,17 +65,17 @@ public class MergeSort {
                 String name = columns[1].replace("\"", "");
                 String latitudeString = columns[2].replace("\"", "");
                 String longitudeString = columns[3].replace("\"", "");
+                String country = columns[4].replace("\"", "");
 
-                double latitude = Double.parseDouble(latitudeString);
-                double longitude = Double.parseDouble(longitudeString);
+                try {
+                    double latitude = Double.parseDouble(latitudeString);
+                    double longitude = Double.parseDouble(longitudeString);
+                    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) continue; // Validerer kordinatene
 
-
-
-
-                // Legger til i to ulike array lister en for oppgave A og en for oppgave B
-                cities.add(new City(name, latitude, longitude));
-
-                cities1.add(new City(name, latitude, longitude));
+                    cities.add(new City(name, latitude, longitude, country));
+                } catch (NumberFormatException e) {
+                    continue; // Handles malformed numeric data
+                }
 
             }
 
@@ -83,19 +87,69 @@ public class MergeSort {
 
 
         int[] mergeCount = new int[1];
-        int[] mergeCount2 = new int[1];
 
+
+        //mergeSort(cities, 0, cities.size() - 1, mergeCount);
+
+
+        /*
+
+        Problem 1B: Sorting by latitude
+
+        long start2 = System.currentTimeMillis();
 
         mergeSort(cities, 0, cities.size() - 1, mergeCount);
 
-        mergeSort2(cities1, 0, cities.size() - 1, mergeCount2);
+        long end2 = System.currentTimeMillis();
 
-        System.out.println(cities1);
+        System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
 
-        System.out.println("Number of merges needed: " + mergeCount2[0]);
+        // Write sorted data to a new CSV file
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath1A))) {
+            writer.println("Name,Latitude,Longitude,Country");
+            for (City city : cities) {
+                writer.println(city.name + "," + city.latitude);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing to file: " + outputFilePath1A);
+        }
+
+        System.out.println("Cities sorted and written to: " + outputFilePath1A);
+        System.out.println("Number of merges needed: " + mergeCount[0]);
+
+
+         */
+
+
+
+        //Problem 1C: Sorting by latitude & longitude distance measure
+
+        long start2 = System.currentTimeMillis();
+
+        mergeSort2(cities, 0, cities.size() - 1, mergeCount);
+
+        long end2 = System.currentTimeMillis();
+
+        System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
+
+        // Write sorted data to a new CSV file
+        try (PrintWriter writer = new PrintWriter(new File(outputFilePath1C))) {
+            writer.println("Name,Latitude,Longitude,Country");
+            for (City city : cities) {
+                writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error writing to file: " + outputFilePath1C);
+        }
+
+        System.out.println("Cities sorted and written to: " + outputFilePath1C);
+        System.out.println("Number of merges needed: " + mergeCount[0]);
+
+
     }
 
     public static void mergeSort(List<City> cities, int left, int right, int[] mergeCount) {
+        // Base case
         if (left < right) {
             // Finner mellompunktet til arrayet
             int middle = (left + right) / 2;
