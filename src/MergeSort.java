@@ -30,18 +30,7 @@ public class MergeSort {
         Use the latitude and longitude values for each city. (20/50 Marks)
             c. Implement a proper merge sort algorithm so that the (latitude, longitude) pairs are in an
                ordered list. What distance measure is used?
-
-               // Usikker på om dette er løst riktig
-
-               Det er flere mulig måter og tolke denne oppgaven på
-
-               - Først sortere etter latitude og deretter longitude eller motsatt
-
-               - Kombinert metrikk for eks. avstand fra equator (som vi gjør nå)
-
-
-    */
-
+*/
     public static void main(String[] args) {
         String filePath = "csv/worldcities.csv";
         String outputFilePath1A = "csv/ms_sorted_bylat_worldcities.csv";
@@ -245,61 +234,48 @@ public class MergeSort {
 
 
     private static void merge2(List<City> cities, int left, int middle, int right, int[] mergeCount) {
-        // Finner størrelsen til sub-arrays for merge
-        int arr1 = middle - left + 1;
-        int arr2 = right - middle;
-
-        // Lager to midligertidige arrays for venstre og høyre siden
-        List<City> L = new ArrayList<>(arr1);
-        List<City> R = new ArrayList<>(arr2);
-
-        // kopierer data til midligere array listene
-        for (int i = 0; i < arr1; ++i)
+        int n1 = middle - left + 1;
+        int n2 = right - middle;
+    
+        List<City> L = new ArrayList<>(n1);
+        List<City> R = new ArrayList<>(n2);
+    
+        for (int i = 0; i < n1; ++i)
             L.add(i, cities.get(left + i));
-
-        for (int j = 0; j < arr2; ++j)
+        for (int j = 0; j < n2; ++j)
             R.add(j, cities.get(middle + 1 + j));
-
-        // Pointere til indexene
+    
         int i = 0;
         int j = 0;
-
-        // index of merged subarray array
+    
         int k = left;
-        double refLat = 0.0; // Ref latitude
-        double refLon = 0.0; // Ref longitude
-
-        while (i < arr1 && j < arr2) {
-            City leftCity = L.get(i);
-            City rightCity = R.get(j);
-            double distanceToLeftCity = calculateDistance(refLat, refLon, leftCity.latitude, leftCity.longitude);
-            double distanceToRightCity = calculateDistance(refLat, refLon, rightCity.latitude, rightCity.longitude);
-
-            if (distanceToLeftCity <= distanceToRightCity) {
-                cities.set(k, leftCity);
+        while (i < n1 && j < n2) {
+            if (L.get(i).latitude < R.get(j).latitude ||
+                    (L.get(i).latitude == R.get(j).latitude && L.get(i).longitude <= R.get(j).longitude)) {
+                cities.set(k, L.get(i));
                 i++;
             } else {
-                cities.set(k, rightCity);
+                cities.set(k, R.get(j));
                 j++;
             }
             k++;
         }
-
-        while (i < arr1) {
+    
+        while (i < n1) {
             cities.set(k, L.get(i));
             i++;
             k++;
         }
-
-        while (j < arr2) {
+    
+        while (j < n2) {
             cities.set(k, R.get(j));
             j++;
             k++;
         }
-
-        mergeCount[0]++; // Inkrementerer merge count
+    
+        mergeCount[0]++;
     }
-
+    
 
 
     // Hentet fra https://www.baeldung.com/java-find-distance-between-points#equirectangular-distance-approximation

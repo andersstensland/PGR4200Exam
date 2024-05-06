@@ -11,10 +11,7 @@ public class QuickSort {
     At first, use the unique latitude values of each city only. (30/50 Marks)
         a. Implement a proper quick sort algorithm so that all city latitudes are in an ordered list.
         b. Count the number of comparisons needed to sort the dataset. Does it change if you
-           randomly order the list before sorting? Why/why not?
-
-           Antall sammenligninger kan endre seg i QuickSort dette skyldes pivot element.
-
+           randomly order the list before sorting? Why/why not
 
 
     Use the latitude and longitude values for each city. (20/50 Marsk)
@@ -22,13 +19,12 @@ public class QuickSort {
         ordered list.
 
 
-
-
      */
 
 
     public static void main(String[] args) {
-        String filePath = "csv/worldcities.csv";
+
+        String filePath = "src/csv/worldcities.csv";
         String outputFilePath2A = "csv/qs_sorted_bylat_worldcities.csv";
         String outputFilePath2C = "csv/qs_sorted_bylat&lng_worldcities.csv";
 
