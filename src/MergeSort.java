@@ -18,7 +18,7 @@ public class MergeSort {
             SVAR:
 
             Merge sort er en "divide and conquer"-algoritme som deler datasettet i to halvdeler, sorterer hver halvdel
-            rekursivt, og deretter sammenslår de to halvdelene til en sorterert liste.
+            rekursivt, og deretter sammenslår de to halvdelene til en sorteret liste.
 
             Antall sammenslåinger (merges) som trengs for å sortere datasettet er direkte knyttet til hvor mange nivåer
             av rekursjon i algoritmen, ikke til den opprinnelige rekkefølgen på dataene. Dette vil si at det har null
@@ -42,35 +42,22 @@ public class MergeSort {
 
     */
 
-
-
     public static void main(String[] args) {
-        String filePath = "csv/worldcities.csv";
-        String outputFilePath1A = "csv/ms_sorted_bylat_worldcities.csv";
-        String outputFilePath1C = "csv/ms_sorted_bylat&lng_worldcities.csv";
+        String filePath = "src/csv/worldcities.csv";
+        String outputFilePath1A = "src/csv/ms_sorted_bylat_worldcities.csv";
+        String outputFilePath1C = "src/csv/ms_sorted_bylat&lng_worldcities.csv";
 
         List<City> cities = new ArrayList<>();
 
-
-        /*
-
-        - Leser fil og legger inn City objekter i Array Listen
-
-
-         */
+        /* Reading file and adding City objects to the ArrayList */
         try (Scanner scanner = new Scanner(new File(filePath))) {
             if (scanner.hasNextLine()) {
-                scanner.nextLine(); // Hopper over første linjen i CSV filen (overskrifter)
+                scanner.nextLine(); // Skip the first line in the CSV file (headers)
             }
 
-            // While loop for resten av CSV Filen
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] columns = line.split(",");
-                // Andre kolonne inneholder navnet på by
-                // Tredje kolonne inneholder lat
-                // Fjerde kolonne innehold lng
-
                 String name = columns[1].replace("\"", "");
                 String latitudeString = columns[2].replace("\"", "");
                 String longitudeString = columns[3].replace("\"", "");
@@ -79,7 +66,7 @@ public class MergeSort {
                 try {
                     double latitude = Double.parseDouble(latitudeString);
                     double longitude = Double.parseDouble(longitudeString);
-                    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) continue; // Validerer kordinatene
+                    if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) continue; // Validate coordinates
 
                     cities.add(new City(name, latitude, longitude, country));
                 } catch (NumberFormatException e) {
@@ -98,50 +85,23 @@ public class MergeSort {
         int[] mergeCount = new int[1];
 
 
-        //mergeSort(cities, 0, cities.size() - 1, mergeCount);
-
-
-
-        //Problem 1A: Sorting by latitude
-
-        long start2 = System.currentTimeMillis();
-
-        mergeSort(cities, 0, cities.size() - 1, mergeCount);
-
-        long end2 = System.currentTimeMillis();
-
-        System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
-
-        // Write sorted data to a new CSV file
-        try (PrintWriter writer = new PrintWriter(new File(outputFilePath1A))) {
-            writer.println("Name,Latitude,Longitude,Country");
-            for (City city : cities) {
-                writer.println(city.name + "," + city.latitude + "," + city.country);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error writing to file: " + outputFilePath1A);
-        }
-
-        System.out.println("Cities sorted and written to: " + outputFilePath1A);
-        System.out.println("Number of merges needed: " + mergeCount[0]);
-
-
-
-
-
         //Problem 1C: Sorting by latitude & longitude distance measure
-        /*
+
         long start2 = System.currentTimeMillis();
 
         mergeSort2(cities, 0, cities.size() - 1, mergeCount);
 
+        // Get memory usage after sorting
+        long memoryAfter = getMemoryUsage();
+
         long end2 = System.currentTimeMillis();
 
-        System.out.println("Elapsed Time in milli seconds: "+ (end2-start2));
+        System.out.println("Elapsed Time in milliseconds: "+ (end2-start2));
+        System.out.println("Memory used after sorting: " + (memoryAfter) + " KB");
 
         // Write sorted data to a new CSV file
         try (PrintWriter writer = new PrintWriter(new File(outputFilePath1C))) {
-            writer.println("Name, Latitude, Longitude, Country");
+            writer.println("Name,Latitude,Longitude,Country");
             for (City city : cities) {
                 writer.println(city.name + "," + city.latitude + "," + city.longitude + "," + city.country);
             }
@@ -151,129 +111,54 @@ public class MergeSort {
 
         System.out.println("Cities sorted and written to: " + outputFilePath1C);
         System.out.println("Number of merges needed: " + mergeCount[0]);
-        */
 
 
     }
-
-    public static void mergeSort(List<City> cities, int left, int right, int[] mergeCount) {
-        // Base case
-        if (left < right) {
-            // Finner mellompunktet til arrayet
-            int middle = (left + right) / 2;
-
-            // Sorter første og andre halvdelene
-            mergeSort(cities, left, middle, mergeCount);
-            mergeSort(cities, middle + 1, right, mergeCount);
-
-            // Merger de sorter halvdelene
-            merge(cities, left, middle, right, mergeCount);
-        }
-    }
-
-
-    private static void merge(List<City> cities, int left, int middle, int right, int[] mergeCount) {
-        // Finner størrelesnen til sub-arrays for merge
-        int arr1 = middle - left + 1;
-        int arr2 = right - middle;
-
-
-
-        // Lager to midlertidig arrays
-        List<City> L = new ArrayList<>(arr1);
-        List<City> R = new ArrayList<>(arr2);
-
-        // Fyller temp arrays for venstre og høyre siden
-        for (int i = 0; i < arr1; ++i)
-            L.add(i, cities.get(left + i));
-        for (int j = 0; j < arr2; ++j)
-            R.add(j, cities.get(middle + 1 + j));
-
-        // Merge
-
-        // indexes
-        int i = 0;
-        int j = 0;
-
-        int k = left;
-        while (i < arr1 && j < arr2) {
-            if(L.get(i).latitude <= R.get(j).latitude) {
-                cities.set(k, L.get(i));
-                i++;
-            } else {
-                cities.set(k, R.get(j));
-                j++;
-            }
-            k++;
-        }
-
-
-        // kopier resterende av elemente i venstre siden av array hvis det er noen
-        while (i < arr1) {
-            cities.set(k, L.get(i));
-            i++;
-            k++;
-        }
-
-        // kopier resterende av elemente i høyre siden av array hvis det er noen
-        while (j < arr2) {
-            cities.set(k, R.get(j));
-            j++;
-            k++;
-        }
-
-
-        mergeCount[0]++;
-
-    }
-
 
     public static void mergeSort2(List<City> cities, int left, int right, int[] mergeCount) {
-
         if (left < right) {
-            // Finner mellompunktet til arrayet
+            // Find the middle point of the array
             int middle = (left + right) / 2;
 
-            // Sorter første og andre halvdelene
+            // Sort first and second halves
             mergeSort2(cities, left, middle, mergeCount);
             mergeSort2(cities, middle + 1, right, mergeCount);
 
-           // Merger de
+            // Merge the sorted halves
             merge2(cities, left, middle, right, mergeCount);
         }
     }
 
 
     private static void merge2(List<City> cities, int left, int middle, int right, int[] mergeCount) {
-        // Finner størrelsen til sub-arrays for merge
+        // Find sizes of two subarrays to be merged
         int arr1 = middle - left + 1;
         int arr2 = right - middle;
 
-        // Lager to midligertidige arrays for venstre og høyre siden
+        // Create temporary arrays
         List<City> L = new ArrayList<>(arr1);
         List<City> R = new ArrayList<>(arr2);
 
-        // kopierer data til midligere array listene
+        // Copy data to temporary arrays
         for (int i = 0; i < arr1; ++i)
             L.add(i, cities.get(left + i));
 
         for (int j = 0; j < arr2; ++j)
             R.add(j, cities.get(middle + 1 + j));
 
-        // Pointere til indexene
-        int i = 0;
-        int j = 0;
+        // Merge the arrays
 
-        // index of merged subarray array
+        // Initial indexes
+        int i = 0, j = 0;
+
+        // Initial index of merged subarray array
         int k = left;
-        double refLat = 0.0; // Ref latitude
-        double refLon = 0.0; // Ref longitude
 
         while (i < arr1 && j < arr2) {
             City leftCity = L.get(i);
             City rightCity = R.get(j);
-            double distanceToLeftCity = calculateDistance(refLat, refLon, leftCity.latitude, leftCity.longitude);
-            double distanceToRightCity = calculateDistance(refLat, refLon, rightCity.latitude, rightCity.longitude);
+            double distanceToLeftCity = calculateDistance(0, 0, leftCity.latitude, leftCity.longitude);
+            double distanceToRightCity = calculateDistance(0, 0, rightCity.latitude, rightCity.longitude);
 
             if (distanceToLeftCity <= distanceToRightCity) {
                 cities.set(k, leftCity);
@@ -285,24 +170,24 @@ public class MergeSort {
             k++;
         }
 
+        // Copy remaining elements of L[] if any
         while (i < arr1) {
             cities.set(k, L.get(i));
             i++;
             k++;
         }
 
+        // Copy remaining elements of R[] if any
         while (j < arr2) {
             cities.set(k, R.get(j));
             j++;
             k++;
         }
 
-        mergeCount[0]++; // Inkrementerer merge count
+        mergeCount[0]++; // Increment merge count
     }
 
 
-
-    // Hentet fra https://www.baeldung.com/java-find-distance-between-points#equirectangular-distance-approximation
 
     // Equirectangular Distance Approximation
     static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -318,6 +203,18 @@ public class MergeSort {
         return distance;
     }
 
+    private static long getMemoryUsage() {
+        // Trigger garbage collection to clear out unused objects
+        System.gc();
+        // Wait for a short time for garbage collection to complete
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        // Get memory usage after garbage collection
+        return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024;
+    }
 
 
 }
